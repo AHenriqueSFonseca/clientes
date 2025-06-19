@@ -41,19 +41,20 @@
             font-size: 1.3em;
         }
 
-        #resultado p {
-            color: #F57C00;
-            font-size: 1.3em;
+        /* Estilo para o texto na tela final, para garantir legibilidade sobre a imagem */
+        #resultado p,
+        #resultado .frase-destaque,
+        #resultado #parabens {
+            color: white; /* Cor do texto para contrastar com a imagem de fundo */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9); /* Sombra para melhorar a legibilidade */
         }
 
         #resultado .frase-destaque {
-            color: #E65100; 
-            font-size: 4em;   
+            font-size: 4em;
             font-weight: bold;
-            line-height: 1.2;   
-            margin-top: 25px;   
-            margin-bottom: 30px; 
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            line-height: 1.2;
+            margin-top: 25px;
+            margin-bottom: 30px;
         }
 
         #mensagemInicial, #resultado1, #resultado2, #resultado3, #resultado4 {
@@ -80,21 +81,43 @@
         }
 
         #resultado {
-            background-image: linear-gradient(135deg, #FFCAD4, #BDE0FE);
+            /* Container principal para a tela final, agora com flexbox em linha */
+            background-color: #000; /* Cor de fundo para preencher se a imagem não cobrir tudo */
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
             min-height: 100vh;
-            display: flex;
-            padding: 30px;
+            display: flex; /* Habilita flexbox */
+            flex-direction: row; /* Alinha os itens lado a lado */
+            padding: 0; /* Remova padding aqui para que as metades possam ter padding individual */
             margin-top: 0;
             border-radius: 0;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             box-sizing: border-box;
+        }
+
+        .resultado-imagem {
+            flex: 1; /* Ocupa 50% da largura */
+            background-image: url('https://i.imgur.com/FlFkBUA.jpeg'); /* LINK DIRETO DA SUA IMAGEM */
+            background-size: contain; /* Faz a imagem inteira aparecer, ajustando-se ao elemento */
+            background-repeat: no-repeat; /* Evita repetição da imagem */
+            background-position: center; /* Centraliza a imagem */
+            min-height: 100vh; /* Garante que o lado da imagem tenha altura total */
+            display: flex; /* Usado para centralizar a imagem se background-size: contain */
+            align-items: center;
+            justify-content: center;
+        }
+
+        .resultado-conteudo {
+            flex: 1; /* Ocupa 50% da largura */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px; /* Padding para o conteúdo de texto */
+            box-sizing: border-box;
+            text-align: center;
         }
 
         /* ÍCONES DECORATIVOS - PRIMEIRA PÁGINA */
@@ -142,9 +165,9 @@
             50% { transform: translateY(-15px) rotate(0deg); }
             75% { transform: translateY(-8px) rotate(4deg); }
         }
-        
+
         #mensagemInicial > p[style*="font-size: 1.7em"] {
-            margin-top: 20px; 
+            margin-top: 20px;
             margin-bottom: 30px;
         }
         /* FIM ÍCONES DECORATIVOS */
@@ -218,8 +241,9 @@
             transition: transform 0.5s ease;
         }
 
+        /* A cor do emoji na tela final será branca devido à regra geral de #resultado p, mas pode ser sobrescrita se desejar */
         #resultado .emoji {
-            color: #F57C00;
+            color: white; /* Mantém a cor branca para contraste com a imagem */
         }
 
 
@@ -247,7 +271,7 @@
          .fadeInRight {
             animation: fadeInRight 0.5s ease-in-out forwards;
         }
-         @keyframes fadeInRight {
+        @keyframes fadeInRight {
             from { transform: translateX(100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
         }
@@ -255,7 +279,7 @@
          .slideOutRight {
             animation: slideOutRight 0.5s ease-in-out forwards;
         }
-         @keyframes slideOutRight {
+        @keyframes slideOutRight {
             from { transform: translateX(0); opacity: 1; }
             to { transform: translateX(100%); opacity: 0; }
         }
@@ -268,6 +292,15 @@
         }
 
         @media (max-width: 768px) {
+            /* Em telas menores, os elementos se empilham verticalmente */
+            #resultado {
+                flex-direction: column;
+            }
+            .resultado-imagem, .resultado-conteudo {
+                min-height: 50vh; /* Cada um ocupa metade da altura da viewport */
+                width: 100%; /* Ocupa a largura total */
+            }
+
             p { font-size: 1em; }
             #mensagemInicial p,
             #resultado1 p,
@@ -280,21 +313,14 @@
                 font-size: 1.1em;
             }
             #resultado .frase-destaque {
-                font-size: 3em;   
-                line-height: 1.15; 
+                font-size: 3em;
+                line-height: 1.15;
                 margin-bottom: 25px;
             }
             #parabens { font-size: 3em; }
             .emoji { font-size: 3em; }
              #mensagemInicial .icones-decorativos-topo { gap: 30px; margin-bottom: 20px;} /* Ajuste responsivo dos ícones */
-             #mensagemInicial .icone-decorativo { font-size: 0.8em !important; } /* Reduz o tamanho dos ícones via font-size (multiplicador para fa-3x) ou usar fa-2x diretamente no HTML para esta view */
-                                                                               /* Se fa-3x é 3x o normal, 0.8 * 3 = 2.4x. Ou mude a classe fa-3x para fa-2x via JS ou tenha HTML duplicado, o que não é ideal. */
-                                                                               /* Uma abordagem mais simples é usar font-size no container dos ícones. */
-            #mensagemInicial .icones-decorativos-topo { font-size: 0.8em; } /* Ajusta o tamanho de todos os ícones dentro (se eles não tiverem fa-Xx classes) */
-                                                                      /* Para fa-Xx classes, isso não funciona diretamente. */
-                                                                      /* Melhor ajustar as classes fa-3x para fa-2x para telas menores se necessário, ou usar unidades relativas no ícone se não usar fa-Xx */
-
-
+             #mensagemInicial .icone-decorativo { font-size: 0.8em !important; }
             .btn-custom {
                 font-size: 1em; padding: 10px 20px; margin: 10px; gap: 8px;
             }
@@ -313,17 +339,14 @@
                 font-size: 1.0em;
             }
             #resultado .frase-destaque {
-                font-size: 2.5em; 
-                line-height: 1.1;  
+                font-size: 2.5em;
+                line-height: 1.1;
                 margin-bottom: 20px;
             }
             #parabens { font-size: 2.5em; }
             .emoji { font-size: 2.5em; }
             #mensagemInicial .icones-decorativos-topo { gap: 25px; margin-bottom: 15px;}
-            /* Ajuste do tamanho dos ícones para telas pequenas: */
-            /* Se estiver usando classes fa-3x, pode ser mais complexo alterá-las dinamicamente apenas com CSS. */
-            /* Considere usar fa-2x para mobile, ou definir o font-size diretamente na classe .icone-decorativo e não usar fa-Xx */
-            #mensagemInicial .icones-decorativos-topo { font-size: 0.7em; } /* Idem acima */
+            #mensagemInicial .icones-decorativos-topo { font-size: 0.7em; }
 
             .btn-custom {
                 font-size: 0.9em; padding: 8px 16px; margin: 8px; gap: 6px;
@@ -390,94 +413,134 @@
         </div>
 
         <div id="resultado" class="hidden">
-            <h2 id="parabens">Uhuuul!</h2>
-            <p class="emoji">✨🎉🧸 <i class="fas fa-baby"></i> 🍼👶🥳🎊</p>
-            <p class="frase-destaque">Nós vamos ter um bebê!</p>
-            <p>Estamos muito felizes em compartilhar essa alegria com vocês.</p>
-            <div>
-                <button class="btn btn-success btn-custom" id="btnIniciarNovamente"> Iniciar Novamente </button>
+            <div class="resultado-imagem">
+                </div>
+            <div class="resultado-conteudo">
+                <p class="frase-destaque">Nós vamos ter um bebê!</p>
+                <p>Estamos muito felizes em compartilhar essa alegria com vocês.</p>               
+		      <div>
+				 <button class="btn btn-info btn-custom" id="btnProximo6">
+                        <i class="fas fa-baby-girl"></i> Descubra o nome e sexo?
+                    </button>                   
+                    <!-- <button class="btn btn-success btn-custom" id="btnIniciarNovamente"> Iniciar Novamente </button> -->
+                </div>
+		    <h2 id="parabens">Uhuuul!</h2>
+                <p class="emoji">✨�🧸 <i class="fas fa-baby"></i> 🍼👶🥳🎊</p>    
+		    
+              
+
+		    
             </div>
         </div>
+		
+		 <div id="paginaFinal" class="hidden">
+            <div class="resultado-conteudo text-center mt-5">
+                <p style="font-size: 1.8em; font-weight: bold; color: #ff99cc;">
+                    💖 Eu sou uma menininha... e meu nome será <strong>Cecília</strong>! 💖
+                </p>
+                <p class="emoji">👧🎀🌸🧸💫</p>
+                <button class="btn btn-success btn-custom mt-3" id="btnIniciarNovamente">
+                    Iniciar Novamente
+                </button>
+            </div>
+        </div>
+		
     </div>
 
-    <script>
-        const mensagemInicial = document.getElementById('mensagemInicial');
-        const resultado1 = document.getElementById('resultado1');
-        const resultado2 = document.getElementById('resultado2');
-        const resultado3 = document.getElementById('resultado3');
-        const resultado4 = document.getElementById('resultado4');
-        const resultadoFinal = document.getElementById('resultado');
+   <script>
+    const mensagemInicial = document.getElementById('mensagemInicial');
+    const resultado1 = document.getElementById('resultado1');
+    const resultado2 = document.getElementById('resultado2');
+    const resultado3 = document.getElementById('resultado3');
+    const resultado4 = document.getElementById('resultado4');
+    const resultadoFinal = document.getElementById('resultado');
+    const paginaFinal = document.getElementById('paginaFinal');
 
-        const btnProximo1 = document.getElementById('btnProximo1');
-        const btnProximo2 = document.getElementById('btnProximo2');
-        const btnProximo3 = document.getElementById('btnProximo3');
-        const btnProximo4 = document.getElementById('btnProximo4');
-        const btnProximo5 = document.getElementById('btnProximo5');
+    const btnProximo1 = document.getElementById('btnProximo1');
+    const btnProximo2 = document.getElementById('btnProximo2');
+    const btnProximo3 = document.getElementById('btnProximo3');
+    const btnProximo4 = document.getElementById('btnProximo4');
+    const btnProximo5 = document.getElementById('btnProximo5');
+    const btnProximo6 = document.getElementById('btnProximo6');
 
-        const btnVoltar1 = document.getElementById('btnVoltar1');
-        const btnVoltar2 = document.getElementById('btnVoltar2');
-        const btnVoltar3 = document.getElementById('btnVoltar3');
-        const btnVoltar4 = document.getElementById('btnVoltar4');
+    const btnVoltar1 = document.getElementById('btnVoltar1');
+    const btnVoltar2 = document.getElementById('btnVoltar2');
+    const btnVoltar3 = document.getElementById('btnVoltar3');
+    const btnVoltar4 = document.getElementById('btnVoltar4');
 
-        const btnIniciarNovamente = document.getElementById('btnIniciarNovamente');
+    const btnIniciarNovamente = document.getElementById('btnIniciarNovamente');
 
-        const forwardExitAnimations = ['slideOutLeft', 'slideOutLeft'];
-        let forwardAnimationIndex = 0;
+    const forwardExitAnimations = ['slideOutLeft', 'slideOutLeft'];
+    let forwardAnimationIndex = 0;
 
-        function goForward(fromPage, toPage) {
-            const exitAnimation = forwardExitAnimations[forwardAnimationIndex % forwardExitAnimations.length];
-            forwardAnimationIndex++;
+    function goForward(fromPage, toPage) {
+        const exitAnimation = forwardExitAnimations[forwardAnimationIndex % forwardExitAnimations.length];
+        forwardAnimationIndex++;
 
-            fromPage.classList.remove('page-entering', 'fadeInLeft', 'fadeInRight');
-            fromPage.classList.add(exitAnimation);
-            fromPage.style.pointerEvents = 'none';
+        fromPage.classList.remove('page-entering', 'fadeInLeft', 'fadeInRight');
+        fromPage.classList.add(exitAnimation);
+        fromPage.style.pointerEvents = 'none';
 
-            setTimeout(() => {
-                fromPage.classList.add('hidden');
-                fromPage.classList.remove(exitAnimation);
-                
-                toPage.classList.remove('hidden');
-                toPage.classList.add('fadeInRight');
-                toPage.style.pointerEvents = 'auto';
-            }, 500);
-        }
+        setTimeout(() => {
+            fromPage.classList.add('hidden');
+            fromPage.classList.remove(exitAnimation);
 
-        function goBack(fromPage, toPage) {
-            fromPage.classList.remove('page-entering', 'fadeInLeft', 'fadeInRight');
-            fromPage.classList.add('slideOutRight');
-            fromPage.style.pointerEvents = 'none';
+            toPage.classList.remove('hidden');
+            toPage.classList.add('fadeInRight');
+            toPage.style.pointerEvents = 'auto';
+        }, 500);
+    }
 
-            setTimeout(() => {
-                fromPage.classList.add('hidden');
-                fromPage.classList.remove('slideOutRight');
+    function goBack(fromPage, toPage) {
+        fromPage.classList.remove('page-entering', 'fadeInLeft', 'fadeInRight');
+        fromPage.classList.add('slideOutRight');
+        fromPage.style.pointerEvents = 'none';
 
-                toPage.classList.remove('hidden');
-                toPage.classList.add('fadeInLeft');
-                toPage.style.pointerEvents = 'auto';
-            }, 500);
-        }
+        setTimeout(() => {
+            fromPage.classList.add('hidden');
+            fromPage.classList.remove('slideOutRight');
 
-        btnProximo1.addEventListener('click', () => goForward(mensagemInicial, resultado1));
-        btnProximo2.addEventListener('click', () => goForward(resultado1, resultado2));
-        btnProximo3.addEventListener('click', () => goForward(resultado2, resultado3));
-        btnProximo4.addEventListener('click', () => goForward(resultado3, resultado4));
-        btnProximo5.addEventListener('click', () => goForward(resultado4, resultadoFinal));
+            toPage.classList.remove('hidden');
+            toPage.classList.add('fadeInLeft');
+            toPage.style.pointerEvents = 'auto';
+        }, 500);
+    }
 
-        btnVoltar1.addEventListener('click', () => goBack(resultado1, mensagemInicial));
-        btnVoltar2.addEventListener('click', () => goBack(resultado2, resultado1));
-        btnVoltar3.addEventListener('click', () => goBack(resultado3, resultado2));
-        btnVoltar4.addEventListener('click', () => goBack(resultado4, resultado3));
+    function resetAllPages() {
+        resultado1.classList.add('hidden');
+        resultado2.classList.add('hidden');
+        resultado3.classList.add('hidden');
+        resultado4.classList.add('hidden');
+        resultadoFinal.classList.add('hidden');
+        paginaFinal.classList.add('hidden');
+    }
 
-        btnIniciarNovamente.addEventListener('click', () => {
-            goBack(resultadoFinal, mensagemInicial);
-            forwardAnimationIndex = 0;
-        });
+    btnProximo1.addEventListener('click', () => goForward(mensagemInicial, resultado1));
+    btnProximo2.addEventListener('click', () => goForward(resultado1, resultado2));
+    btnProximo3.addEventListener('click', () => goForward(resultado2, resultado3));
+    btnProximo4.addEventListener('click', () => goForward(resultado3, resultado4));
+    btnProximo5.addEventListener('click', () => goForward(resultado4, resultadoFinal));
+    btnProximo6.addEventListener('click', () => goForward(resultadoFinal, paginaFinal));
 
-         document.addEventListener('DOMContentLoaded', () => {
-            mensagemInicial.classList.remove('hidden');
-            mensagemInicial.classList.add('page-entering');
-            mensagemInicial.style.pointerEvents = 'auto';
-         });
-    </script>
+    btnVoltar1.addEventListener('click', () => goBack(resultado1, mensagemInicial));
+    btnVoltar2.addEventListener('click', () => goBack(resultado2, resultado1));
+    btnVoltar3.addEventListener('click', () => goBack(resultado3, resultado2));
+    btnVoltar4.addEventListener('click', () => goBack(resultado4, resultado3));
+
+    btnIniciarNovamente.addEventListener('click', () => {
+        goBack(paginaFinal, mensagemInicial);
+        forwardAnimationIndex = 0;
+        resetAllPages();
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        mensagemInicial.classList.remove('hidden');
+        mensagemInicial.classList.add('page-entering');
+        mensagemInicial.style.pointerEvents = 'auto';
+        resetAllPages(); // Garante que tudo menos a inicial fique oculto no carregamento
+    });
+</script>
+
 </body>
 </html>
+
